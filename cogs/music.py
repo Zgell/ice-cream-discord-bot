@@ -36,6 +36,10 @@ class Music(commands.Cog):
         '''
         NOTE: For now, just use a dummy audio file. Later you can integrate music streaming
         '''
+        '''
+        Plays an audio source:
+        src - Audio source. Can refer to an on-system file or a URL.
+        '''
         try:
             server = ctx.message.guild
             voice_channel = server.voice_client
@@ -47,6 +51,31 @@ class Music(commands.Cog):
         except Exception as e:
             await ctx.send("The bot is not connected to a voice channel.")
             print(e)
+
+    @commands.command(name='pause', help='Pauses the current audio source.')
+    async def pause(self, ctx):
+        voice_client = ctx.message.guild.voice_client
+        if voice_client.is_playing():
+            await voice_client.pause()
+        else:
+            await ctx.send("The bot is not playing any audio at the moment.")
+
+    @commands.command(name='unpause', help='Unpauses any paused audio source.')
+    async def unpause(self, ctx):
+        voice_client = ctx.message.guild.voice_client
+        if voice_client.is_paused():
+            await voice_client.resume()
+        else:
+            await ctx.send("The bot was not playing anything before. Use **$play** first.")
+
+    @commands.command(name='stop', help='Stops the current audio source.')
+    async def stop(self, ctx):
+        voice_client = ctx.message.guild.voice_client
+        if voice_client.is_playing():
+            await voice_client.stop()
+        else:
+            await ctx.send("The bot is not playing any audio at the moment.")
+
 
 async def setup(bot):
     await bot.add_cog(Music(bot))
