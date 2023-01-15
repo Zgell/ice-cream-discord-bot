@@ -18,10 +18,8 @@ from discord.ext import commands
 from Keys import DISCORD_TOKEN as SECRET_KEY
 
 initial_extensions = [
-    'cogs.late', 
-    'cogs.ping', 
-    'cogs.presence', 
-    'cogs.slash'
+    'cogs.fun',
+    'cogs.debug'
 ]
 
 bot = commands.Bot(command_prefix='$', description='A bot for general-purpose Discord functionality.', intents=discord.Intents.all())

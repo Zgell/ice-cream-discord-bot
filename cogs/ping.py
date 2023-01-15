@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-class Test(commands.Cog):
+class Ping(commands.Cog):
     def __init__(self, bot):
         self.bot = bot # sets the client variable so we can use it in cogs
 
@@ -15,4 +15,4 @@ class Test(commands.Cog):
         await ctx.send('Pong!')
 
 async def setup(bot):
-    await bot.add_cog(Test(bot))
+    await bot.add_cog(Ping(bot))
