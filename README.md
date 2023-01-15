@@ -5,6 +5,7 @@ Ice Cream Bot is a Python-based Discord bot built on Discord.py. It is a general
 In no particular order:
 - Support for both traditional commands and slash ("/") commands
 - Backend database support
+- 🎵 A music player! 🎵
 
 # FAQ
 ## Q: When will I be able to invite this bot to my server?
