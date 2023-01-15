@@ -2,11 +2,14 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import Keys
+from ytdl import YTDLSource
 
 '''
 NOTE: Make sure to install the correct libraries needed:
 pip install discord.py[voice]
 '''
+
+YTDL_ENABLED = True
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -32,7 +35,7 @@ class Music(commands.Cog):
             await ctx.send("The bot is not connected to a voice channel.")
 
     @commands.command(name='play', help='Plays an audio source.')
-    async def play(self, ctx):
+    async def play(self, ctx, url):
         '''
         NOTE: For now, just use a dummy audio file. Later you can integrate music streaming
         '''
@@ -45,7 +48,10 @@ class Music(commands.Cog):
             voice_channel = server.voice_client
 
             async with ctx.typing():
-                filename = 'audio/test_audio.mp3'  # NOTE: Change this later!
+                if YTDL_ENABLED and url is not None:
+                    filename = await YTDLSource.from_url(url, loop=self.bot.loop)
+                else:
+                    filename = 'audio/test_audio.mp3'  # NOTE: Change this later!
                 voice_channel.play(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename))
             await ctx.send(f'**Now playing:** {filename}')
         except Exception as e:

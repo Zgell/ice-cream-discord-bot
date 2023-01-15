@@ -5,5 +5,6 @@
 /.vscode
 /env
 Keys.py
+ytdl.py
 users.db
 defaults.sql
