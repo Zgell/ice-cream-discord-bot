@@ -1,0 +1,8 @@
+/__pycache__
+/cogs/__pycache__
+/color/__pycache__
+/.vscode
+/env
+Keys.py
+users.db
+defaults.sql
