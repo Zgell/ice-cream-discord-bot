@@ -23,31 +23,11 @@ initial_extensions = [
 ]
 
 bot = commands.Bot(command_prefix='$', description='A bot for general-purpose Discord functionality.', intents=discord.Intents.all())
-# bot.remove_command('help')
+
 
 @bot.event
 async def on_ready():
     print(f'Logged in as: {Colors.CYAN+bot.user.name+Colors.RESET} - {bot.user.id}\nVersion: {discord.__version__}\n')
-
-# @bot.command(name='help', help='Lists all commands available.')
-# async def help(self, ctx, module=None, cmd=None):
-#     cogs = self.bot.cogs
-#     if (module is None) and (cmd is None):
-#         # List all modules
-#         embed = discord.Embed(title='Ice Cream Bot Modules', description='Use "/help <module>" for more info.')
-#         for cog in cogs:
-#             embed.add_field(name=cog.qualified_name, value=cog.description, inline=False)
-#         await ctx.send(embed=embed)
-#     else:
-#         await ctx.send('Invalid command syntax. Try "$help" for more info.')
-#     # for key in cogs.keys():
-#     #     commands = cogs[key].get_commands()
-#     #     app_commands = cogs[key].get_app_commands()
-#     #     for command in commands:
-#     #         print(f'{command.name} -- {command.help}')
-#     #     for app_command in app_commands:
-#     #         print(f'{app_command.name} -- {app_command.description}')
-#     # await ctx.send('Cogs printed!')
 
 
 async def main():

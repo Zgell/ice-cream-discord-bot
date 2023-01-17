@@ -12,11 +12,13 @@ class Debug(commands.Cog):
         print('An error occurred in the following command:', interaction.command)
         print('ERROR:', str(error))
 
+
     @commands.command(name='ping', 
                     description='Tests if the bot is online and functional.')
     async def ping(self, ctx):
         # an example command with cogs
         await ctx.send('Pong!')
+
 
     @commands.command(name='slash-sync', 
                     description='A dev-only command used to synchronize commands with the Discord API.')
@@ -28,12 +30,14 @@ class Debug(commands.Cog):
             except Exception as e:
                 print(f"Error syncing commands: {e}")
 
+
     @app_commands.command(name='slash', 
                         description='A test command for slash commands. Does absolutely nothing.')
     async def slash(self, interaction: discord.Interaction):
         # an example command with cogs
         # await ctx.send('Yeeoooo!')
         await interaction.response.send_message("Yeeoooo!", ephemeral=True)
+
 
     @app_commands.command(name='help', description='Lists all available commands.')
     async def help(self, interaction: discord.Interaction, module: str = None, command: str = None):
@@ -94,7 +98,7 @@ class Debug(commands.Cog):
                     embed = discord.Embed(title=f'Ice Cream Bot - **{command.lower()}**', 
                                         description=command_object.description)
                     await interaction.response.send_message(embed=embed)
-                    
+
                 else:
                     await interaction.response.send_message(f'WARNING: Command {command.lower()} does not exist.')
             else:
@@ -103,25 +107,7 @@ class Debug(commands.Cog):
         else:
             await interaction.response.send_message('/help called!')
 
-    # @commands.command(name='help', help='Lists all commands available.')
-    # async def help(self, ctx, module=None, cmd=None):
-    #     cogs = self.bot.cogs
-    #     if (module is None) and (cmd is None):
-    #         # List all modules
-    #         embed = discord.Embed(title='Ice Cream Bot Modules', description='Use "/help <module>" for more info.')
-    #         for cog in cogs:
-    #             embed.add_field(name=cog.qualified_name, value=cog.description, inline=False)
-    #         await ctx.send(embed=embed)
-    #     else:
-    #         await ctx.send('Invalid command syntax. Try "$help" for more info.')
-    #     # for key in cogs.keys():
-    #     #     commands = cogs[key].get_commands()
-    #     #     app_commands = cogs[key].get_app_commands()
-    #     #     for command in commands:
-    #     #         print(f'{command.name} -- {command.help}')
-    #     #     for app_command in app_commands:
-    #     #         print(f'{app_command.name} -- {app_command.description}')
-    #     # await ctx.send('Cogs printed!')
+
 
 async def setup(bot):
     # By default, Discord.py includes a help command. It must be removed first.
