@@ -14,6 +14,9 @@ YTDL_ENABLED = True
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot # sets the client variable so we can use it in cogs
+        self.now_playing_title = 'N/A'
+        self.now_playing_channel = 'N/A'
+        self.now_playing_duration = 'N/A'
 
     '''
     Info on nested slash commands / command groups:
@@ -76,13 +79,23 @@ class Music(commands.Cog):
             # Slash commands don't have an analog for typing, so we'll adapt for now
             await interaction.response.send_message('Playing audio source...', ephemeral=True)
             if YTDL_ENABLED and len(src) > 0:
-                filename = await YTDLSource.from_url(src, loop=self.bot.loop, stream=True)
+                url_data = await YTDLSource.from_url(src, loop=self.bot.loop, stream=True)
+                filename = url_data['filename']
+                url_title = url_data['title']
+                url_channel = url_data['channel']
+                url_duration = url_data['duration']
             else:
                 filename = 'audio/test_audio.mp3'
+                url_title = 'Test Audio'
+                url_channel = 'Ice Cream Bot'
+                url_duration = '???'
 
             # voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename)), volume=1.0)
             voice_client.play(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename))
             voice_client.source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
+            self.now_playing_title = url_title
+            self.now_playing_channel = url_channel
+            self.now_playing_duration = url_duration
 
             await interaction.response.send_message(f'**Now playing:** {filename}')
 
@@ -143,10 +156,19 @@ class Music(commands.Cog):
         '''
         voice_client = interaction.guild.voice_client
         if voice_client.is_playing():
+            # If you don't start with the message for some reason, it throws an error...?
             await interaction.response.send_message('The bot has stopped playing audio.', ephemeral=True)
             await voice_client.stop()
         else:
             await interaction.response.send_message('The bot is not playing any audio at the moment.', ephemeral=True)
+
+    
+    @vc_group.command(name='np', description='Prints the data for whatever audio is currently playing.')
+    async def np(self, interaction: discord.Interaction):
+        '''Generates an embed with song metadata and prints it.'''
+        embed = discord.Embed(title='Now Playing')
+        embed.add_field(name=f'{self.now_playing_title} - {self.now_playing_channel}', value=f'Duration: {self.now_playing_duration}', inline=False)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 async def setup(bot):
