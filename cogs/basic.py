@@ -1,52 +1,32 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import Keys
 
-'''
-NOTE: This module has been deprecated! All commands in this module have been
-ported to other modules, but will remain in the codebase for reference
-for the time being.
-'''
-
-class Debug(commands.Cog):
+class Basic(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot # sets the client variable so we can use it in cogs
-        self.description = 'A set of tools related to debugging the bot.'
+        self.bot = bot
+        self.description = 'A set of basic commands to get started with the bot.'
+        self.public_module = True  # Lets commands show up in any server
 
-    async def cog_app_command_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
+    async def cog_app_command_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError) -> None:
+        '''
+        Called any time a slash command receives an error. Logs the error in 
+        the terminal and lets the user know that an error occurred.
+        '''
+        # Log the error for developer's sake
         print('An error occurred in the following command:', interaction.command)
         print('ERROR:', str(error))
+        # Also let the user know something went wrong
+        await interaction.response.send_message()
 
-
-    @commands.command(name='ping', 
+    @app_commands.command(name='ping', 
                     description='Tests if the bot is online and functional.')
-    async def ping(self, ctx):
+    async def ping(self, interaction: discord.Interaction) -> None:
         # an example command with cogs
-        await ctx.send('Pong!')
-
-
-    @commands.command(name='slash-sync', 
-                    description='A dev-only command used to synchronize commands with the Discord API.')
-    async def slash_sync(self, ctx):
-        if ctx.author.id == Keys.ZGELL_ID:
-            try:
-                synced = await self.bot.tree.sync()
-                print(f"Synced {len(synced)} commands with Discord API!")
-            except Exception as e:
-                print(f"Error syncing commands: {e}")
-
-
-    @app_commands.command(name='slash', 
-                        description='A test command for slash commands. Does absolutely nothing.')
-    async def slash(self, interaction: discord.Interaction):
-        # an example command with cogs
-        # await ctx.send('Yeeoooo!')
-        await interaction.response.send_message("Yeeoooo!", ephemeral=True)
-
+        await interaction.response.send_message('Pong!')
 
     @app_commands.command(name='help', description='Lists all available commands.')
-    async def help(self, interaction: discord.Interaction, module: str = None, command: str = None):
+    async def help(self, interaction: discord.Interaction, module: str = None, command: str = None) -> None:
         if (module is None) and (command is None):
             # List all modules
             embed = discord.Embed(title='Ice Cream Bot Modules', description='Use "/help <module>" for more info.')
@@ -113,8 +93,7 @@ class Debug(commands.Cog):
         else:
             await interaction.response.send_message('/help called!')
 
-
-
 async def setup(bot):
-    # By default, Discord.py includes a help command. It must be removed first.
-    await bot.add_cog(Debug(bot))
+    # NOTE: The bot comes with a default "$help" command, the one registered
+    # in this module is a separate, custom one.
+    await bot.add_cog(Basic(bot))
