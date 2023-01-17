@@ -61,26 +61,31 @@ class Music(commands.Cog):
     @app_commands.describe(
         src='The source of audio to be played. Can be a URL from a supported website or a filename stored on the bot\'s server.'
     )
-    async def play(self, interaction: discord.Interaction, src: str):
+    async def play(self, interaction: discord.Interaction, src: str = ''):
         '''
         Plays an audio source:
         src - Audio source. Can refer to an on-system file or a URL.
         '''
         try:
             server = interaction.guild
-            voice_channel = server.voice_client
+            voice_client = server.voice_client
 
             '''
             BUG: For now, just assume that only YT URLs are passed. Can fix this later.
             '''
             # Slash commands don't have an analog for typing, so we'll adapt for now
-            await interaction.response.send_message('Downloading audio source...', ephemeral=True)
-            if YTDL_ENABLED and src is not None:
+            await interaction.response.send_message('Playing audio source...', ephemeral=True)
+            if YTDL_ENABLED and len(src) > 0:
                 filename = await YTDLSource.from_url(src, loop=self.bot.loop, stream=True)
             else:
                 filename = 'audio/test_audio.mp3'
-            voice_channel.play(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename))
+
+            # voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename)), volume=1.0)
+            voice_client.play(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename))
+            # voice_client.source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
+
             await interaction.response.send_message(f'**Now playing:** {filename}')
+
         except Exception as e:
             await interaction.response.send_message('The bot is not connected to a voice channel.', ephemeral=True)
             print(e)
@@ -102,6 +107,27 @@ class Music(commands.Cog):
             await voice_client.resume()
         else:
             await interaction.response.send_message('The bot was not playing anything before. Use **/vc play <audio>** first.', ephemeral=True)
+
+
+    @vc_group.command(name='volume', description='Sets the volume of the bot between 0%% and 100%%. Default value is 100%%.')
+    async def volume(self, interaction: discord.Interaction, vol: str = '100%'):
+        voice_client = interaction.guild.voice_client  # Used to manipulate volume
+        if vol.endswith('%'):  # Percentage is allowed, but it will be stripped
+            vol = vol[:-1]
+        try:
+            # Weed out invalid volume values
+            volume_int = int(vol)
+            if volume_int < 0 or volume_int > 100:
+                raise ValueError('Invalid volume given! Make sure the value is between 0 and 100 (inclusively).')
+            
+            # At this point it is assumed that volume is valid.
+            normalized_volume = volume_int / 100
+            # voice_client.source = discord.PCMVolumeTransformer(voice_client.source, normalized_volume)
+            voice_client.source.volume = normalized_volume
+            await interaction.response.send_message(f'Set the volume to {volume_int}%', ephemeral=True)
+
+        except Exception as e:
+            await interaction.response.send_message(f'ERROR: {e}', ephemeral=True)
 
 
     @vc_group.command(name='stop', description='Stops the current audio source.')
