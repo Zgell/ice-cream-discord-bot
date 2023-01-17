@@ -21,7 +21,8 @@ initial_extensions = [
     # 'cogs.fun',
     # 'cogs.debug'
     'cogs.basic',
-    'cogs.devtools'
+    'cogs.devtools',
+    'cogs.servers.cryenogenic'
 ]
 
 bot = commands.Bot(command_prefix='$', description='A bot for general-purpose Discord functionality.', intents=discord.Intents.all())

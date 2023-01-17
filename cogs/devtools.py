@@ -7,6 +7,7 @@ class Devtools(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.description = 'A set of commands reserved for bot developers only.'
+        self.public_module = True  # Lets commands show up in any server
 
     async def cog_app_command_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError) -> None:
         '''
