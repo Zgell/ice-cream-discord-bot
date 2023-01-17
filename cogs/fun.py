@@ -1,6 +1,12 @@
 from discord.ext import commands
 import Keys
 
+'''
+NOTE: This module has been (temporarily) deprecated!
+I intend to use this module in the future for random fun commands, but for
+now it will be disconnected, but will remain in the codebase.
+'''
+
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot # sets the client variable so we can use it in cogs
