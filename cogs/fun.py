@@ -4,6 +4,7 @@ import Keys
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot # sets the client variable so we can use it in cogs
+        self.description = 'A set of fun commands!'
 
     @commands.Cog.listener()
     async def on_message(self, msg):

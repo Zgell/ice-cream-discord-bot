@@ -1,8 +1,10 @@
 /__pycache__
+/audio
 /cogs/__pycache__
 /color/__pycache__
 /.vscode
 /env
 Keys.py
+ytdl.py
 users.db
 defaults.sql

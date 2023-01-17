@@ -24,6 +24,7 @@ initial_extensions = [
 
 bot = commands.Bot(command_prefix='$', description='A bot for general-purpose Discord functionality.', intents=discord.Intents.all())
 
+
 @bot.event
 async def on_ready():
     print(f'Logged in as: {Colors.CYAN+bot.user.name+Colors.RESET} - {bot.user.id}\nVersion: {discord.__version__}\n')
@@ -34,6 +35,7 @@ async def main():
     # Load all extensions
     print('Loading extension...')
     for extension in initial_extensions:
+        print(f'Loading {extension}...')
         await bot.load_extension(extension)
     print('Starting bot...\n')
     await bot.start(SECRET_KEY)
