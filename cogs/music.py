@@ -25,6 +25,7 @@ class Music(commands.Cog):
     TODO: Add clean-up for files after usage
     TODO: Look into streaming the audio directly? See this: https://stackoverflow.com/questions/60745020/is-there-a-way-to-directly-stream-audio-from-a-youtube-video-using-youtube-dl-or
     TODO: Make "src" argument for /vc play optional so it can play a default noise
+    TODO: Make bot leave automatically after not being used for a set amount of time (a timeout)
     '''
 
     vc_group = app_commands.Group(name="vc", description="All commands pertaining to Voice Channel functionality.")
@@ -76,7 +77,7 @@ class Music(commands.Cog):
             # Slash commands don't have an analog for typing, so we'll adapt for now
             await interaction.response.send_message('Downloading audio source...', ephemeral=True)
             if YTDL_ENABLED and src is not None:
-                filename = await YTDLSource.from_url(src, loop=self.bot.loop)
+                filename = await YTDLSource.from_url(src, loop=self.bot.loop, stream=True)
             else:
                 filename = 'audio/test_audio.mp3'
             voice_channel.play(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename))
