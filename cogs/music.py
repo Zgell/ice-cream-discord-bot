@@ -82,7 +82,7 @@ class Music(commands.Cog):
 
             # voice_client.play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename)), volume=1.0)
             voice_client.play(discord.FFmpegPCMAudio(executable="audio/ffmpeg.exe", source=filename))
-            # voice_client.source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
+            voice_client.source = discord.PCMVolumeTransformer(voice_client.source, volume=1.0)
 
             await interaction.response.send_message(f'**Now playing:** {filename}')
 
@@ -111,6 +111,12 @@ class Music(commands.Cog):
 
     @vc_group.command(name='volume', description='Sets the volume of the bot between 0%% and 100%%. Default value is 100%%.')
     async def volume(self, interaction: discord.Interaction, vol: str = '100%'):
+        '''
+        Changes the volume of the audio coming out of the bot.
+        Params:
+        interaction -- The interaction used to response to the message.
+        vol -- The volume argument for the command. Must be a number (either with or without a % symbol) between 0 and 100.
+        '''
         voice_client = interaction.guild.voice_client  # Used to manipulate volume
         if vol.endswith('%'):  # Percentage is allowed, but it will be stripped
             vol = vol[:-1]
@@ -137,8 +143,8 @@ class Music(commands.Cog):
         '''
         voice_client = interaction.guild.voice_client
         if voice_client.is_playing():
-            await voice_client.stop()
             await interaction.response.send_message('The bot has stopped playing audio.', ephemeral=True)
+            await voice_client.stop()
         else:
             await interaction.response.send_message('The bot is not playing any audio at the moment.', ephemeral=True)
 
