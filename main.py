@@ -34,6 +34,7 @@ async def main():
     # Load all extensions
     print('Loading extension...')
     for extension in initial_extensions:
+        print(f'Loading {extension}...')
         await bot.load_extension(extension)
     print('Starting bot...\n')
     await bot.start(SECRET_KEY)
