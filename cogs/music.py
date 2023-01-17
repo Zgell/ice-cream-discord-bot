@@ -23,7 +23,6 @@ class Music(commands.Cog):
     '''
     TODO: Add a "play" queue
     TODO: Add clean-up for files after usage
-    TODO: Look into streaming the audio directly? See this: https://stackoverflow.com/questions/60745020/is-there-a-way-to-directly-stream-audio-from-a-youtube-video-using-youtube-dl-or
     TODO: Make "src" argument for /vc play optional so it can play a default noise
     TODO: Make bot leave automatically after not being used for a set amount of time (a timeout)
     '''
