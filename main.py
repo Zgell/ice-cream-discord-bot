@@ -13,6 +13,7 @@ https://beta.openai.com/docs/api-reference/introduction
 
 import asyncio
 from color.colors import Colors
+from datetime import datetime
 import discord
 from discord.ext import commands
 from Keys import DISCORD_TOKEN as SECRET_KEY
@@ -25,7 +26,16 @@ initial_extensions = [
     'cogs.servers.cryenogenic'
 ]
 
-bot = commands.Bot(command_prefix='$', description='A bot for general-purpose Discord functionality.', intents=discord.Intents.all())
+bot_startup_time = datetime.now()
+bot_activity = discord.Activity(type=discord.ActivityType.listening, 
+                                name="/help",
+                                state="Bing chilling"
+                                )
+bot = commands.Bot(command_prefix='$', 
+                description='A bot for general-purpose Discord functionality.', 
+                intents=discord.Intents.all(),
+                activity=bot_activity,
+                status=discord.Status.online)
 
 
 @bot.event
